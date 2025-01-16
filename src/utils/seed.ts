@@ -10,12 +10,10 @@ export const seedUrls = async () => {
         for (let i = 0; i < seedCount; i++) {
             const fakeUrl = faker.internet.url();
             const shortCode = generateShortCode();
-            const clickCount = faker.number.int({ min: 0, max: 1000 });
 
             urlsToInsert.push({
                 originalUrl: fakeUrl,
-                shortCode: shortCode,
-                clickCount: clickCount,
+                shortCode: shortCode
             });
         }
 

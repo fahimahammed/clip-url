@@ -11,10 +11,6 @@ const urlSchema = new Schema<ILinkRecord>(
             type: String,
             required: true,
             unique: true
-        },
-        clickCount: {
-            type: Number,
-            default: 0
         }
     },
     { timestamps: true }

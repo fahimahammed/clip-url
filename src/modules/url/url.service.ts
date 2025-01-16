@@ -28,10 +28,8 @@ const getOriginalUrl = async (shortCode: string): Promise<string> => {
     const cachedUrl = await redisClient.get(shortCode);
     if (cachedUrl) return cachedUrl;
 
-    const result = await Url.findOneAndUpdate(
-        { shortCode },
-        { $inc: { clickCount: 1 } },
-        { new: true, select: 'originalUrl' }
+    const result = await Url.findOne(
+        { shortCode }
     );
 
     if (!result) throw new Error('URL not found.');
