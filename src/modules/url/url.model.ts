@@ -7,7 +7,7 @@ const urlSchema = new Schema<ILinkRecord>(
             type: String,
             required: true
         },
-        shortUrl: {
+        shortCode: {
             type: String,
             required: true,
             unique: true
@@ -20,6 +20,6 @@ const urlSchema = new Schema<ILinkRecord>(
     { timestamps: true }
 );
 
-urlSchema.index({ shortUrl: 1 });
+urlSchema.index({ shortCode: 1 });
 
 export const Url = mongoose.model<ILinkRecord>('Url', urlSchema);

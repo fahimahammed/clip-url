@@ -5,32 +5,39 @@ import { generateShortUrl } from './url.utils';
 const createShortUrl = async (
     payload: {
         originalUrl: string,
-        customShortUrl?: string
+        customShortCode?: string
     }
 ): Promise<string> => {
-    const { originalUrl, customShortUrl } = payload;
-    const shortUrl = customShortUrl || generateShortUrl();
+    const { originalUrl, customShortCode } = payload;
+    const shortCode = customShortCode || generateShortUrl();
 
-    const existing = await Url.findOne({ shortUrl });
+    console.log({ shortCode });
+
+    const existing = await Url.findOne({ shortCode });
 
     if (existing) {
         throw new Error('Short URL already exists.');
     }
 
-    const url = new Url({ originalUrl, shortUrl });
-    await url.save();
-    return shortUrl;
+    const urlDoc = new Url({ originalUrl, shortCode });
+    await urlDoc.save();
+    return `http://localhost:3000/api/v1/url/${shortCode}`;
 };
 
-const getOriginalUrl = async (shortUrl: string): Promise<string> => {
-    const cachedUrl = await redisClient.get(shortUrl);
+const getOriginalUrl = async (shortCode: string): Promise<string> => {
+    const cachedUrl = await redisClient.get(shortCode);
     if (cachedUrl) return cachedUrl;
 
-    const url = await Url.findOne({ shortUrl });
-    if (!url) throw new Error('URL not found.');
+    const result = await Url.findOneAndUpdate(
+        { shortCode },
+        { $inc: { clickCount: 1 } },
+        { new: true, select: 'originalUrl' }
+    );
 
-    await redisClient.set(shortUrl, url.originalUrl, { EX: 3600 });
-    return url.originalUrl;
+    if (!result) throw new Error('URL not found.');
+
+    await redisClient.set(shortCode, result.originalUrl, { EX: 3600 });
+    return result.originalUrl;
 };
 
 export const UrlService = {
