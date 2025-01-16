@@ -1,16 +1,23 @@
 import express from 'express';
 import { UrlRoutes } from './modules/url/url.routes';
 import { errorHandler } from './middlewares/errorHandler';
-// import urlRoutes from './modules/url/route';
-// import { rateLimiter } from './middlewares/rateLimiter';
-// import { errorHandler } from './middlewares/errorHandler';
-// import { applySecurityMiddlewares } from './middlewares/security';
+import rateLimit from 'express-rate-limit';
+import cors from 'cors';
+import helmet from 'helmet';
 
 const app = express();
 
 app.use(express.json());
-// applySecurityMiddlewares(app);
-// app.use(rateLimiter);
+app.use(helmet());
+app.use(cors({ origin: '*' }));
+
+const rateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per window
+    message: 'Too many requests. Try again later.',
+});
+
+app.use(rateLimiter);
 
 app.use('/api/v1/url', UrlRoutes);
 app.use(errorHandler);
