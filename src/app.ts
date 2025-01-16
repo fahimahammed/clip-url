@@ -1,5 +1,6 @@
 import express from 'express';
 import { UrlRoutes } from './modules/url/url.routes';
+import { errorHandler } from './middlewares/errorHandler';
 // import urlRoutes from './modules/url/route';
 // import { rateLimiter } from './middlewares/rateLimiter';
 // import { errorHandler } from './middlewares/errorHandler';
@@ -12,6 +13,6 @@ app.use(express.json());
 // app.use(rateLimiter);
 
 app.use('/api/v1/url', UrlRoutes);
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
