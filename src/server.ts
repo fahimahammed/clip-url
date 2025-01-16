@@ -3,7 +3,6 @@ import { connectDB } from './config/db';
 import { config } from './config/env';
 import { connectRedis } from './config/redis';
 
-
 async function run() {
     await connectDB();
     await connectRedis();

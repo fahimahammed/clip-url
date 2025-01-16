@@ -1,6 +1,6 @@
 import { redisClient } from '../../config/redis';
 import { Url } from './url.model';
-import { generateShortUrl } from './url.utils';
+import { generateShortCode } from './url.utils';
 
 const createShortUrl = async (
     payload: {
@@ -9,7 +9,7 @@ const createShortUrl = async (
     }
 ): Promise<string> => {
     const { originalUrl, customShortCode } = payload;
-    const shortCode = customShortCode || generateShortUrl();
+    const shortCode = customShortCode || generateShortCode();
 
     console.log({ shortCode });
 

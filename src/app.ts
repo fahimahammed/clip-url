@@ -4,8 +4,11 @@ import { errorHandler } from './middlewares/errorHandler';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import helmet from 'helmet';
+import { seedUrls } from './utils/seed';
 
 const app = express();
+
+// seedUrls();
 
 app.use(express.json());
 app.use(helmet());
